@@ -6,6 +6,17 @@ from detectron2.config import get_cfg
 
 from loader import get_balloon_dicts
 
+# Register balloon dataset
+from detectron2.data import DatasetCatalog, MetadataCatalog
+from detectron2.data.datasets import register_coco_instances
+
+for d in ["train", "val"]:
+    DatasetCatalog.register("balloon_" + d, lambda d=d: get_balloon_dicts("balloon/" + d))
+    MetadataCatalog.get("balloon_" + d).set(thing_classes=["balloon"])
+
+balloon_metadata = MetadataCatalog.get("balloon/train")
+
+# Model configuration
 cfg = get_cfg()
 cfg.merge_from_file(model_zoo.get_config_file("COCO-InstanceSegmentation/mask_rcnn_R_50_FPN_3x.yaml"))
 cfg.DATASETS.TRAIN = ("balloon_train",)

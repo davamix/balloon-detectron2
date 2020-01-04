@@ -52,19 +52,17 @@ def get_balloon_dicts(img_dir):
 
     return dataset_dicts
 
-from detectron2.data import DatasetCatalog, MetadataCatalog
-
-
-for d in ["train", "val"]:
-    DatasetCatalog.register("balloon_" + d, lambda d=d: get_balloon_dicts("balloon/" + d))
-    MetadataCatalog.get("balloon_" + d).set(thing_classes=["balloon"])
-
-balloon_metadata = MetadataCatalog.get("balloon_train")
-
 
 # Verify data loading function
-
 def verify_dataloader():
+    from detectron2.data import DatasetCatalog, MetadataCatalog
+
+    for d in ["train", "val"]:
+        DatasetCatalog.register("balloon_" + d, lambda d=d: get_balloon_dicts("balloon/" + d))
+        MetadataCatalog.get("balloon_" + d).set(thing_classes=["balloon"])
+
+    balloon_metadata = MetadataCatalog.get("balloon_train")
+
     dataset_dicts = get_balloon_dicts("balloon/train")
 
     random.seed(1)
