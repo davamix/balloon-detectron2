@@ -1,2 +1,7 @@
 .X11-unix/
 detectron2/
+__pycache__/
+balloon/
+output/
+
+*.zip
