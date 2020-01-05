@@ -8,27 +8,23 @@ from detectron2.utils.visualizer import Visualizer
 
 def get_balloon_dicts(img_dir):
     json_file = os.path.join(img_dir, "via_region_data.json")
-    
     with open(json_file) as f:
         imgs_anns = json.load(f)
 
     dataset_dicts = []
-    
     for idx, v in enumerate(imgs_anns.values()):
         record = {}
-
+        
         filename = os.path.join(img_dir, v["filename"])
         height, width = cv2.imread(filename).shape[:2]
-
+        
         record["file_name"] = filename
         record["image_id"] = idx
         record["height"] = height
         record["width"] = width
-        
-
+      
         annos = v["regions"]
         objs = []
-
         for _, anno in annos.items():
             assert not anno["region_attributes"]
             anno = anno["shape_attributes"]
@@ -44,12 +40,9 @@ def get_balloon_dicts(img_dir):
                 "category_id": 0,
                 "iscrowd": 0
             }
-
             objs.append(obj)
-
         record["annotations"] = objs
         dataset_dicts.append(record)
-
     return dataset_dicts
 
 
